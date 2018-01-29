@@ -1,5 +1,8 @@
 package com.github.hoseinzare67.training.telegram.bot.game.model;
 
+/**
+ * @author hosseinzare67
+ */
 public class Statement {
     private int lValue ;
     private int rValue ;

@@ -1,11 +1,13 @@
 package com.github.hoseinzare67.training.telegram.bot.game.handler;
 
 import com.github.hoseinzare67.training.telegram.bot.game.GameBot;
-import com.github.hoseinzare67.training.telegram.bot.game.exception.InternalBotException;
 import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 
+/**
+ * @author hosseinzare67
+ */
 public class InvalidCommandHandler extends RequestHandler {
     public InvalidCommandHandler(GameBot gameBot, Update update) {
         super(gameBot, update);

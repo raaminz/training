@@ -11,6 +11,9 @@ import org.telegram.telegrambots.api.methods.BotApiMethod;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 
+/**
+ * @author hosseinzare67
+ */
 public class StartGameCommandHandler extends RequestHandler {
 
     public StartGameCommandHandler(GameBot gameBot, Update update) {

@@ -9,9 +9,11 @@ import com.github.hoseinzare67.training.telegram.bot.game.model.Statement;
 import com.github.hoseinzare67.training.telegram.bot.game.service.data.FilePlayerHistoryRepository;
 import com.github.hoseinzare67.training.telegram.bot.game.service.data.PlayerHistoryRepository;
 
-import javax.swing.plaf.nimbus.State;
 import java.util.Random;
 
+/**
+ * @author hosseinzare67
+ */
 public final class PlayLogic {
     private static final int MAX_STATEMENTS = 2;
 

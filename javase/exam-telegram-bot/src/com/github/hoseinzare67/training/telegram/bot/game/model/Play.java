@@ -3,6 +3,9 @@ package com.github.hoseinzare67.training.telegram.bot.game.model;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author hosseinzare67
+ */
 public class Play implements Serializable{
 
     private static final long serialVersionUID = 22414L;

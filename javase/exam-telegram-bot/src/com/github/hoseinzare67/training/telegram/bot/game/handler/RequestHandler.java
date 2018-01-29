@@ -7,6 +7,9 @@ import org.telegram.telegrambots.api.objects.Update;
 
 import java.io.Serializable;
 
+/**
+ * @author hosseinzare67
+ */
 public abstract class RequestHandler {
     private GameBot gameBot;
     private Update update;

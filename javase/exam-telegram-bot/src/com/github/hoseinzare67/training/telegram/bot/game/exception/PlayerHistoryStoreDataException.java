@@ -1,5 +1,8 @@
 package com.github.hoseinzare67.training.telegram.bot.game.exception;
 
+/**
+ * @author hosseinzare67
+ */
 public class PlayerHistoryStoreDataException extends InternalBotException {
     public PlayerHistoryStoreDataException() {
     }

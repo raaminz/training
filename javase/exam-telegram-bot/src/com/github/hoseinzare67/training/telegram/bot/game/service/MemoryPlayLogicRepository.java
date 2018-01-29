@@ -3,6 +3,9 @@ package com.github.hoseinzare67.training.telegram.bot.game.service;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author hosseinzare67
+ */
 public class MemoryPlayLogicRepository implements PlayLogicRepository {
 
 

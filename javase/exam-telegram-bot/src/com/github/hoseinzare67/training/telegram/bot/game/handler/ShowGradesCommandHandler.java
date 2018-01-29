@@ -9,6 +9,9 @@ import org.telegram.telegrambots.api.objects.Update;
 
 import java.util.List;
 
+/**
+ * @author hosseinzare67
+ */
 public class ShowGradesCommandHandler extends RequestHandler {
     public ShowGradesCommandHandler(GameBot gameBot, Update update) {
         super(gameBot, update);

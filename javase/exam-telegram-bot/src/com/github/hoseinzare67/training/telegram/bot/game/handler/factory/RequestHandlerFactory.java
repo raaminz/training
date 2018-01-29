@@ -5,6 +5,9 @@ import com.github.hoseinzare67.training.telegram.bot.game.handler.*;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 
+/**
+ * @author hosseinzare67
+ */
 public final class RequestHandlerFactory {
 
     private RequestHandlerFactory() {
