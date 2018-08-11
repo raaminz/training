@@ -1,0 +1,24 @@
+
+public class X264Properties {
+    private int keyInt;
+    private int minKeyInt;
+    private int sceneCut;
+    private int bFrames;
+    private int bAdapt;
+    private int qp;
+    private int bitrate;
+    private boolean bFrameBias;
+    private int crf;
+    private int qpStep;
+    private int pbRatio;
+    private int chromaOffset;
+    private float rateTol;
+    private byte pass;
+    private boolean stats;
+    private int direct;
+    private int meRange;
+    private boolean weightB;
+    private boolean noFastPSkip;
+
+
+}

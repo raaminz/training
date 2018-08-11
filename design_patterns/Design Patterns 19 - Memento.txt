@@ -1,0 +1,117 @@
+package com.demisco.dp.memento.gui;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class MainPanel extends JPanel {
+
+    private JLabel jLabel;
+    private JTextField jTextField;
+    private JButton jButton;
+
+    public MainPanel() {
+        jLabel = new JLabel("Enter Your Name");
+        jTextField = new JTextField(20);
+        jButton = new JButton("Save!");
+        setLayout(new FlowLayout());
+        add(jLabel);
+        add(jTextField);
+        add(jButton);
+    }
+
+    public static void main(String[] args) {
+        JFrame jFrame = new JFrame("Memento Design Pattern");
+        jFrame.setSize(800, 200);
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        jFrame.add(new MainPanel());
+
+        jFrame.setVisible(true);
+    }
+}
+
+
+
+
+--------------------------------------------
+package com.demisco.dp.memento.gui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class MainPanel extends JPanel {
+
+    private JLabel jLabel;
+    private JTextField jTextField;
+    private JButton jButton;
+    private JTextFieldHistory jTextFieldHistory;
+
+    public MainPanel() {
+        jLabel = new JLabel("Enter Your Name (Ctrl-Z to undo):");
+        jTextField = new JTextField(20);
+        jButton = new JButton("Save!");
+        jTextFieldHistory = new JTextFieldHistory(jTextField);
+
+        setLayout(new FlowLayout());
+        add(jLabel);
+        add(jTextField);
+        add(jButton);
+        jButton.addActionListener(e -> jTextFieldHistory.save());
+        
+        jTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if ((e.getKeyCode() == KeyEvent.VK_Z)
+                        && ((e.getModifiers() & KeyEvent.CTRL_MASK) != 0)) {
+                    jTextFieldHistory.restore();
+                }
+            }
+
+        });
+    }
+
+    public static void main(String[] args) {
+        JFrame jFrame = new JFrame("Memento Design Pattern");
+        jFrame.setSize(800, 200);
+        jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        jFrame.add(new MainPanel());
+
+        jFrame.setVisible(true);
+    }
+}
+
+-----------------------------
+
+package com.demisco.dp.memento.gui;
+
+import javax.swing.*;
+import java.util.LinkedList;
+import java.util.Objects;
+
+//Caretaker
+public class JTextFieldHistory {
+
+    private LinkedList<JTextFieldMemento> fieldMementos = new LinkedList<>();
+    private JTextField jTextField;
+
+    public JTextFieldHistory(JTextField jTextField) {
+        Objects.requireNonNull(jTextField);
+        this.jTextField = jTextField;
+    }
+
+    public void save() {
+        fieldMementos.push(new JTextFieldMemento(jTextField.getText()));
+        jTextField.setText("");
+    }
+
+    public void restore() {
+        if (!fieldMementos.isEmpty()) {
+            JTextFieldMemento pop = fieldMementos.pop();
+            jTextField.setText(pop.getText());
+        } else {
+            jTextField.setText("");
+        }
+    }
+}

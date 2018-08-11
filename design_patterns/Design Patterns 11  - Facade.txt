@@ -1,0 +1,9 @@
+URL url = new URL("https", "github.com", 443,
+        "/hoseinzare67/training");
+BufferedReader input = new BufferedReader(
+        new InputStreamReader(url.openStream()));
+String inputLine;
+while ((inputLine = input.readLine()) != null) {
+    System.out.println(inputLine);
+}
+input.close();

@@ -1,0 +1,31 @@
+public class MessageSubject extends Observable {
+
+    public void sendMessage(String message){
+        setChanged();
+        notifyObservers(message);
+    }
+}
+
+
+
+public class EmailObserver implements Observer {
+
+    public String[] emailAddresses;
+
+    public EmailObserver(String... emailAddresses) {
+        this.emailAddresses = emailAddresses;
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        Arrays.stream(emailAddresses).forEach( str -> {
+        System.out.println(
+                String.format("SENDING EMAIL TO : %s . MESSAGE : %s" , str , arg));});
+    }
+}
+
+MessageSubject messageSubject = new MessageSubject();
+
+        messageSubject.addObserver(new EmailObserver("aa@bb.com","ww@hh.com"));
+
+        messageSubject.sendMessage("Hey this is Hosein , Please Call.");

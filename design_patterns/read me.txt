@@ -1,0 +1,8 @@
+References : 
+	PluralSight Design Patterns in Java
+	Bryan Hansen
+
+	https://sourcemaking.com/design_patterns
+
+	Java Design Patterns
+	Vaskaran Sarcar

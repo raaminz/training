@@ -1,0 +1,99 @@
+//TEXT
+
+package com.javaland.decorator.element;
+
+import java.util.Arrays;
+
+public abstract class Renderer {
+
+    private Attribute[] attributes;
+
+    public Renderer(Attribute... attributes) {
+        this.attributes = attributes;
+    }
+
+    public Renderer() {
+    }
+
+    public void applyAttributes(Attribute... attributes) {
+        this.attributes = attributes;
+    }
+
+     protected String writeAttributes(Attribute... attributes) {
+        String result;
+        if (attributes != null) {
+            result = Arrays.stream(attributes)
+                    .filter(attr -> attr.getValue() != null && attr.getName() != null)
+                    .map(attr -> attr.getName() + "='" + attr.getValue() + "' ")
+                    .reduce("", String::concat);
+        } else {
+            result = "";
+        }
+        return result;
+    }
+
+    protected String writeAttributesAsStyle(Attribute... attributes) {
+        String result;
+        if (attributes != null) {
+            result = Arrays.stream(attributes)
+                    .filter(attr -> attr.getValue() != null && attr.getName() != null)
+                    .map(attr -> attr.getName() + ":" + attr.getValue() + ";")
+                    .reduce("", String::concat);
+        } else {
+            result = "";
+        }
+        return result;
+    }
+
+    protected Attribute[] getAttributes() {
+        return attributes;
+    }
+
+    public abstract String write();
+}
+
+
+#################
+package com.javaland.decorator.element.impl;
+
+import com.javaland.decorator.element.Attribute;
+import com.javaland.decorator.element.Renderer;
+
+public class SubmitInputHtmlElement extends Renderer {
+
+
+    public SubmitInputHtmlElement(Attribute... attributes) {
+        super(attributes);
+    }
+
+    @Override
+    public String write() {
+        return "<input type='submit' "
+                + writeAttributes(getAttributes()) +
+                "/>";
+    }
+}
+
+##############################
+package com.javaland.decorator.element.impl;
+
+import com.javaland.decorator.element.Renderer;
+
+public class StyleDecorator extends Renderer {
+
+    private Renderer renderer;
+
+    public StyleDecorator(Renderer renderer) {
+        this.renderer = renderer;
+    }
+
+    @Override
+    public String write() {
+        String styles = writeAttributesAsStyle(getAttributes());
+        if (styles != null)
+            styles = "style=\"" + styles + "\"";
+        return "<div class='form-input' " + styles + ">"
+                + renderer.write() + "</div>";
+    }
+
+}
