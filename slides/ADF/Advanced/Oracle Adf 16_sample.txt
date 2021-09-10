@@ -1,0 +1,108 @@
+Step1: Defining client-side validation in JavaScript
+
+// In emailValidator.js
+function EmailClientValidator() {  } // This is added for debugging   this._class = "EmailClientValidator"; }
+// TrValidator is from Trinidad Java Script library. This is
+// conceptually similar to javax.faces.validator.Validator // in JSF
+EmailClientValidator.prototype = new TrValidator();
+/**  * Validates the email field on client side.
+*	If any violations are found, a TrValidatorException will
+*	be thrown which contains TrFacesMessage describing the * reason for failure.
+*	@param value - value to be validated
+*	@param label- label to identify the input field to the user * @param converter - converter to format error string 
+*	properly
+ */
+EmailClientValidator.prototype.validate = function (value, label,  converter) { 
+  var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  //If email is invalid, then throw error   
+  if (!emailPattern.test(value)) {
+    var fm = new TrFacesMessage("Email validation failed",
+      "Invalid Email", TrFacesMessage.SEVERITY_ERROR);
+      throw new TrValidatorException(fm);
+  }
+
+
+
+Step 2: Defining the validator Java class
+
+
+public class EmailValidator implements Validator,
+  ClientValidator {
+  //Pattern for email validation
+  Pattern emailPattern = Pattern.compile
+    ("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$");
+  public EmailValidator() {     super();
+  }
+  /**
+  *This is used to import the built-in scripts   *provided by Apache Trinidad.
+  *If this function returns null, built in   *"Validator()" will be used.
+  */
+  @Override
+  public Collection<String> getClientImportNames() {     return null;   }
+  /**
+*	Implementation for
+*	ClientValidator::getClientLibrarySource()
+*	Gets the URI specifying the location of the js  * lib resource.
+  */
+  @Override
+  public String getClientLibrarySource(FacesContext context)   {
+    return context.getExternalContext().
+      getRequestContextPath() + "/resources/js/email.js";   }
+  /**
+*	Implementation for ClientValidator::getClientScript()
+*	Opportunity for the ClientValidator to return    * script content.
+   */
+  @Override
+  public String getClientScript(FacesContext context,
+    UIComponent component) {     return null;   }
+  /**
+*	Implementation for 
+*	ClientValidator::getClientValidation()
+*	Called to retrieve the appropriate client
+*	validation code(JavaScript method) for the
+*	current field
+   */
+  @Override
+  public String getClientValidation(FacesContext context,
+    UIComponent component) {
+      return ("new EmailClientValidator()");   }
+  /**
+*	Implementation for Validator::validate()   * This validates the value on server.
+   */ 
+  @Override
+  public void validate(FacesContext facesContext,     UIComponent uIComponent, Object object) throws
+    ValidatorException {     //This method does the following:
+    // 1. Validates email format using regular expression
+    // 2. Validates the existence of email using
+    //third party service
+    Matcher matcher = emailPattern.       matcher(object.toString());     if (!matcher.matches()) {       if (!validateEmailBySendingMail(object)) {
+        FacesMessage msg = new FacesMessage
+          ("Email validation failed", "Invalid Email");         msg.setSeverity(FacesMessage.SEVERITY_ERROR);         throw new ValidatorException(msg);       }
+    }
+  }
+  /**
+  *This method validates the existence of email
+  */
+  public boolean validateEmailBySendingMail
+    ( Object email) {
+    //Email Service tests the validity of an email
+    //It's implementation is not shown here     return EMailService.validate(email);
+  }
+}
+
+
+
+Step 3: Configuring and using the validator
+
+
+<validator>
+  <validator-id>EmailValidator</validator-id>
+  <validator-class>
+    com.packtpub.adfguide.ch11.view.validator.EmailValidator
+  </validator-class>
+</validator>
+
+
+<af:inputText label="Email" id="it5"   value="#{ValidateBean.email}">
+<f:validator validatorId="EmailValidator"/>
+<!-- EmailValidator is the validator-id configured in   faces-config.xml --> </af:inputText>

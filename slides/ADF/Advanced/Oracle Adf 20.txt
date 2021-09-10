@@ -1,0 +1,36 @@
+function copyValueToSelectedRows(evt) {      
+   var txtField = evt.getSource();     
+   var column = txtField.getProperty('colname');       
+} 
+
+
+
+function openPopup(popupId, compId){   
+    return function(evt){ 
+       var popup = AdfPage.PAGE.findComponentByAbsoluteId(popupId);     
+       var hints = {align:"end_before", alignId:compId };      
+       popup.show(hints);   
+} 
+
+
+
+function handleKeyUp (evt) {
+	var inputTextComponen = event.getSource();
+	AdfCustomEvent.queue(inputTextComponent, " MyCustomServerEvent ", {fvalue:component.getSubmittedValue()},false);
+event.cancel(); }  
+
+
+StringBuilder script = new StringBuilder(); 
+script.append( 
+  "var popup = AdfPage.PAGE.findComponentByAbsoluteId('p1');"); 
+script.append("if(popup != null){"); script.append("popup.show();"); script.append("}"); 
+
+FacesContext fctx = FacesContext.getCurrentInstance(); 
+ExtendedRenderKitService erks = Service.getRenderKitService(fctx,ExtendedRenderKitService.class);  
+erks.addScript(fctx, script.toString()); 
+
+
+
+#{adfFacesContext.outputMode != "email"}
+
+?org.apache.myfaces.trinidad.agent.email=true

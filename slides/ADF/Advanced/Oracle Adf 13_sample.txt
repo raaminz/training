@@ -1,0 +1,129 @@
+    public RowIterator getSelectedNodeRowIterator() {
+        RowIterator ri = null;
+        RichTreeTable depTreeTable = getDeptTreeTable();
+        //Store the original Key
+        Object oldKey = depTreeTable.getRowKey();
+        try {
+            if (depTreeTable.getSelectedRowKeys() != null) {
+                for (Object opaqueFacesKey : depTreeTable.getSelectedRowKeys()) {
+                    depTreeTable.setRowKey(opaqueFacesKey);
+                    //Get the RowIterator for the lowest node
+                    //in the selected node path
+                    ri = ((JUCtrlHierNodeBinding)depTreeTable.getRowData()).getRowIterator();
+                    break;
+                }
+            }
+        } finally {
+            //Restore the original Key     getDeptTreeTable().setRowKey(oldKey);
+        }
+        return ri;
+    }
+
+
+
+
+    public Key getSelectedNodeRowKey() {
+        Key key = null;
+        RichTreeTable depTreeTable = getDeptTreeTable();
+        //Store the original Key
+        Object oldKey = depTreeTable.getRowKey();
+        try {
+            if (depTreeTable.getSelectedRowKeys() != null) {
+                for (Object opaqueFacesKey :
+                     depTreeTable.getSelectedRowKeys()) { //Return the Key for the lowest level
+                    //in the selection         depTreeTable.setRowKey(opaqueFacesKey);
+                    key = ((JUCtrlHierNodeBinding)depTreeTable.getRowData()).getRowKey();
+                    break;
+                }
+            }
+        } finally {
+            //Restore the original Key
+            //depTreeTable.setRowKey(oldKey);
+        }
+        return key;
+    }
+
+
+    public void setDeptTreeTable(RichTreeTable deptTreeTable) {
+        this.deptTreeTable = deptTreeTable;
+    }
+
+    public RichTreeTable getDeptTreeTable() {
+        return deptTreeTable;
+    }
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
+    }
+
+
+    public void createChildren(RowIterator ri, Key selectedNodeKey) {
+        final String deptViewDefName = "com.fanousoft.adfguide.model.view.DepartmentVO";
+        final String empViewDefName = "com.fanousoft.adfguide.model.view.EmployeeVO";
+        if (ri != null && selectedNodeKey != null) { //Find the Row, using selected node key
+            Row[] found = ri.findByKey(selectedNodeKey, 1);
+            if (found != null && found.length == 1) {
+                Row foundRow = found[0];
+                String nodeDefname = foundRow.getStructureDef().getDefFullName();
+                if (nodeDefname.equals(deptViewDefName)) {
+                    RowSet childRows = (RowSet)foundRow.getAttribute("Employees");
+                    Row childrow = childRows.createRow();
+                    childRows.insertRow(childrow);
+                } else if (nodeDefname.equals(empViewDefName)) {
+                    RowSet childRows = (RowSet)foundRow.getAttribute("Reportees");
+                    Row childrow = childRows.createRow();
+                    childRows.insertRow(childrow);
+                }
+            } else {
+                //Row not found for selected node
+                System.out.println("Node not Found for " + selectedNodeKey);
+            }
+        } else {
+            // No node was selected when this method is called, create node at top level parent VO
+            ViewObjectImpl vo = getDepartments();
+            Row foundRow = vo.first();
+            Row childrow = vo.createRow();
+            vo.insertRow(childrow);
+        }
+    }
+
+
+
+    public void deleteChildren(RowIterator ri, Key selectedNodeKey) {
+        if (ri != null && selectedNodeKey != null) {
+            //Finds the row using the Key passed by the caller
+            Row[] rows = ri.findByKey(selectedNodeKey, 1);
+            if (rows != null) {
+                for (Row row : rows) {
+                    row.remove();
+                }
+            } else {
+                System.out.println("Node not Found for " + selectedNodeKey);
+            }
+        }
+    }
+
+
+
+///////////////////////////////////////////////////////////////////////
+
+
+<methodAction id="createChildren" RequiresUpdateModel="true" 
+    Action="invokeMethod" MethodName="createChildren"
+    IsViewObjectMethod="false"
+    DataControl="HRServiceAppModuleDataControl"
+    InstanceName=
+"data.HRServiceAppModuleDataControl.dataProvider">
+  <NamedData NDName="ri"
+      NDValue="#{TreeBean.selectedNodeRowIterator}" 
+      NDType="oracle.jbo.RowIterator"/>
+  <NamedData NDName="selectedNodeKey"
+      NDValue="#{TreeBean.selectedNodeRowKey}" 
+      NDType="oracle.jbo.Key"/>
+</methodAction>
+
+
+
+

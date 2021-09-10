@@ -1,0 +1,62 @@
+Customizing the display for train stops:
+
+
+<af:navigationPane hint="tabs"     value="#{controllerContext.currentViewPort.
+             taskFlowContext.trainModel}"
+    var="trainNode" id="np1">   <f:facet name="nodeStamp">   <af:commandNavigationItem 
+        text="#{trainNode.textAndAccessKey}" id="cni1"
+        visited="#{trainNode.visited}"              disabled="#{trainNode.disabled}" action="#{trainNode.action}" 
+selected="#{TrainBean.currentTab}"/>
+    </f:facet>
+</af:navigationPane>
+
+
+
+public boolean isCurrentTab() {
+   //Get current stop
+  TaskFlowTrainModel model =
+    ControllerContext.getInstance().
+       getCurrentViewPort().getTaskFlowContext().
+       getTaskFlowTrainModel();
+  TaskFlowTrainStopModel currentStop =        model.getCurrentStop();
+   //Following code helps you to get current 
+   //view activity in the task flow
+  FacesContext fctx = FacesContext.getCurrentInstance();
+  ELContext elctx = fctx.getELContext();
+  Application app = fctx.getApplication();
+  ExpressionFactory expressionFactory =        app.getExpressionFactory();
+   //trainNode is the name of the variable 
+   //attribute defined in af:navigationPane
+  ValueExpression ve = expressionFactory.
+       createValueExpression(elctx, "#{trainNode}",
+       Object.class);
+  TaskFlowTrainStopModel renderedTrainNode = 
+       (TaskFlowTrainStopModel)ve.getValue(elctx);
+  String renderedActivityId = 
+       renderedTrainNode.getLocalActivityId();    //Check whether renderedActivityId is same as current stop   
+	if (renderedActivityId.equalsIgnoreCase(currentStop.getLocalActivityId())) {
+	     return true;
+  }   
+	return false;
+}
+
+
+
+----------------------------------------------------------------------------
+
+public String nextTrainStop() {
+   //Get current stop
+	  TaskFlowTrainModel model =  	 
+              ControllerContext.getInstance().getCurrentViewPort().
+              getTaskFlowContext().getTaskFlowTrainModel();   
+	TaskFlowTrainStopModel currentStop = model.getCurrentStop();
+   //Next train stop
+  TaskFlowTrainStopModel nextStop = model.getNextStop(currentStop);   
+	if (nextStop != null)     
+	return nextStop.getOutcome();   
+	else
+    	return currentStop.getOutcome(); 
+}
+
+<af:commandButton text="Go to Next Stop" id="b5" action="#{pageFlowScope.TrainBean.nextTrainStop}"/>
+

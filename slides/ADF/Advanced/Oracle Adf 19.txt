@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<adf-settings xmlns="http://xmlns.oracle.com/adf/settings">
+    <adf-faces-config xmlns="http://xmlns.oracle.com/adf/faces/settings">
+        <help-provider prefix="RBHELP_">
+            <help-provider-class>com.fanousoft.train.fod.view.HelpProvider</help-provider-class>
+            <property>
+                <property-name>baseName</property-name>
+                <value>com.fanousoft.train.fod.view.help</value>
+            </property>
+        </help-provider>
+    </adf-faces-config>
+</adf-settings>
+
+
+
+
+
+RBHELP_EMAIL_DEFINITION=to Send us email for checking your service
+RBHELP_EMAIL_INSTRUCTIONS=Example for help instructions
+
+
+value="#{adfFacesContext.helpProvider['XLIFF_CREDIT_CARD'].instructions}
+
+AdfPage.PAGE.launchHelpWindow("helpClient.jspx");
