@@ -1,3 +1,3 @@
-You can watch the videos :
+You can watch the videos here:
 
-http://bit.ly/rzare-ytube
+[https://www.youtube.com/RaminZare](https://www.youtube.com/RaminZare)
